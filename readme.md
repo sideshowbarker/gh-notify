@@ -1,93 +1,96 @@
-<div align="center">
+# GitHub CLI extension TUI for viewing your notifications
 
-# GitHub CLI Notification Extension
-A [gh](https://github.com/cli/cli) extension to view your GitHub notifications from the command line.
+[fzf](https://github.com/junegunn/fzf#installation)-built [GitHub CLI](https://github.com/cli/cli) extension [TUI](https://en.wikipedia.org/wiki/Text-based_user_interface) to view [your GitHub notifications](https://github.com/notifications) from your terminal — _and mark them as done_.
+
+> [!NOTE]
+> This is a [meiji163/gh-notify](https://github.com/meiji163/gh-notify) fork that adds the capability to mark notifications as done.
 
 https://github.com/meiji163/gh-notify/assets/92653266/b7d7fcdb-8a25-43fc-8f63-d11f30960084
 
- </div>
-
 ## Install
 
-Make sure you have [GitHub CLI (gh)](https://github.com/cli/cli#installation) installed.
+Make sure you have the [GitHub CLI](https://github.com/cli/cli#installation) (the `gh` command) and [fzf](https://github.com/junegunn/fzf#installation) installed. Then:
 
 ```sh
 # install
-gh ext install meiji163/gh-notify
+gh ext install sideshowbarker/gh-notify
 # upgrade
-gh ext upgrade meiji163/gh-notify
+gh ext upgrade sideshowbarker/gh-notify
 # uninstall
-gh ext remove meiji163/gh-notify
+gh ext remove sideshowbarker/gh-notify
 ```
 
-To use `gh notify` interactively, install these tools as well:
-- [Fuzzy Finder (fzf)](https://github.com/junegunn/fzf#installation) - This allows for
-  interaction with listed data.
-- [Python](https://www.python.org/) - In cases where `gh` can't open the `URL` in your browser, this
-  one-liner is used as a cross-platform solution: `python -m webbrowser <URL>`
+> [!IMPORTANT]
+> To actually be able to use `gh notify` as an interactive [TUI](https://en.wikipedia.org/wiki/Text-based_user_interface), you _must_ install [fzf](https://github.com/junegunn/fzf#installation).
 
 ## Usage
 
-```sh
-gh notify [Flags]
+```
+gh notify [options]
 ```
 
-| Flags    | Description                                             | Example                                              |
-| -------- | ------------------------------------------------------- | ---------------------------------------------------- |
-| <none>   | show all unread notifications                           | `gh notify`                                          |
-| `-a`     | show all (read/ unread) notifications                   | `gh notify -a`                                       |
-| `-e`     | exclude notifications matching a string (REGEX support) | `gh notify -e "MyJob"`                               |
-| `-f`     | filter notifications matching a string (REGEX support)  | `gh notify -f "Repo"`                                |
-| `-h`     | show the help page                                      | `gh notify -h`                                       |
-| `-n NUM` | max number of notifications to show                     | `gh notify -an 10`                                   |
-| `-p`     | show only participating or mentioned notifications      | `gh notify -ap`                                      |
-| `-r`     | mark all notifications as read                          | `gh notify -r`                                       |
-| `-s`     | print a static display                                  | `gh notify -an 10 -s`                                |
-| `-u URL` | (un)subscribe a URL, useful for issues/prs of interest  | `gh notify -u https://github.com/cli/cli/issues/659` |
-| `-w`     | display the preview window in interactive mode          | `gh notify -an 10 -w`                                |
+| Options | Description                                             | Example                                              |
+| :------ | :------------------------------------------------------ | :--------------------------------------------------- |
+|  _none_ | show all unread notifications                           | `gh notify`                                            |
+| `-a`      | show all (read/ unread) notifications                   | `gh notify -a`                                         |
+| `-e`      | exclude notifications matching a string (REGEX support) | `gh notify -e "MyJob"`                                 |
+| `-f`      | filter notifications matching a string (REGEX support)  | `gh notify -f "Repo"`                                  |
+| `-h`      | show the help page                                      | `gh notify -h`                                         |
+| `‑n NUM`  | max number of notifications to show                     | `gh notify -an 10`                                     |
+| `-p`      | show only participating or mentioned notifications      | `gh notify -ap`                                        |
+| `-r`      | mark all notifications as read                          | `gh notify -r`                                         |
+| `-s`      | print a static display                                  | `gh notify -an 10 -s`                                  |
+| `‑u URL`  | (un)subscribe a URL, useful for issues/PRs of interest  | `gh notify -u <url>`                                   |
+| `-w`      | display the preview window at startup                   | `gh notify -an 10 -w`                                  |
 
-### Key Bindings fzf
+### Key bindings fzf
 
-| Keys                           | Description                                         | Customization Environment Variable |
-| ------------------------------ | --------------------------------------------------- | ---------------------------------- |
-| <kbd>?</kbd>                   | toggle help                                         | `GH_NOTIFY_TOGGLE_HELP_KEY`        |
-| <kbd>enter</kbd>               | view the selected notification in the 'less' pager  | `GH_NOTIFY_VIEW_KEY`               |
-| <kbd>tab</kbd>                 | toggle notification preview                         | `GH_NOTIFY_TOGGLE_PREVIEW_KEY`     |
-| <kbd>shift</kbd><kbd>tab</kbd> | resize the preview window                           | `GH_NOTIFY_RESIZE_PREVIEW_KEY`     |
-| <kbd>shift</kbd><kbd>↑↓</kbd>  | scroll the preview up/ down                         |                                    |
-| <kbd>ctrl</kbd><kbd>a</kbd>    | mark all displayed notifications as read and reload | `GH_NOTIFY_MARK_ALL_READ_KEY`      |
-| <kbd>ctrl</kbd><kbd>b</kbd>    | browser                                             | `GH_NOTIFY_OPEN_BROWSER_KEY`       |
-| <kbd>ctrl</kbd><kbd>d</kbd>    | view diff                                           | `GH_NOTIFY_VIEW_DIFF_KEY`          |
-| <kbd>ctrl</kbd><kbd>p</kbd>    | view diff in patch format                           | `GH_NOTIFY_VIEW_PATCH_KEY`         |
-| <kbd>ctrl</kbd><kbd>r</kbd>    | reload                                              | `GH_NOTIFY_RELOAD_KEY`             |
-| <kbd>ctrl</kbd><kbd>t</kbd>    | mark the selected notification as read and reload   | `GH_NOTIFY_MARK_READ_KEY`          |
-| <kbd>ctrl</kbd><kbd>x</kbd>    | write a comment with the editor and quit            | `GH_NOTIFY_COMMENT_KEY`            |
-| <kbd>ctrl</kbd><kbd>y</kbd>    | toggle the selected notification                    | `GH_NOTIFY_TOGGLE_KEY`             |
-| <kbd>esc</kbd>                 | quit                                                |                                    |
+| Key       | Description                                                       | Customization environment variable |
+| :-------- | :--------------------------------------------------               | :--------------------------------- |
+| `?`         | toggle help                                                       | `GH_NOTIFY_TOGGLE_HELP_KEY`          |
+| `↑↓`        | move the pointer up/down                                          |                                    |
+| `ctrl-j/k`  | move the pointer up/down                                          |                                    |
+| `ctrl-n/p`  | move the pointer up/down                                          |                                    |
+| `enter`     | show issue/PR for notification at pointer                         | `GH_NOTIFY_VIEW_KEY`                 |
+| `tab`       | show/hide preview for notification at pointer                     | `GH_NOTIFY_TOGGLE_PREVIEW_KEY`       |
+| `shift‑tab` | resize the preview window                                         | `GH_NOTIFY_RESIZE_PREVIEW_KEY`       |
+| `shift‑↑↓`  | scroll the preview-window contents up/down                        |                                    |
+| `ctrl-a`    | mark all displayed notifications as read, and reload                | `GH_NOTIFY_MARK_ALL_READ_KEY`        |
+| `ctrl-b`    | open in browser                                                   | `GH_NOTIFY_OPEN_BROWSER_KEY`         |
+| `ctrl-d`    | view diff                                                         | `GH_NOTIFY_VIEW_DIFF_KEY`            |
+| `ctrl-f`    | view diff in patch format                                         | `GH_NOTIFY_VIEW_PATCH_KEY`           |
+| `ctrl-r`    | reload                                                            | `GH_NOTIFY_RELOAD_KEY`               |
+| `ctrl-t`    | mark selected notification as read, and reload                | `GH_NOTIFY_MARK_READ_KEY`            |
+| `ctrl-w`    | mark selected notification as read+done, and reload       | `GH_NOTIFY_MARK_READ_KEY`            |
+| `ctrl-x`    | write a comment with the editor and quit                          | `GH_NOTIFY_COMMENT_KEY`              |
+| `ctrl-y`    | toggle the selected notification                                  | `GH_NOTIFY_TOGGLE_KEY`               |
+| `esc`       | quit                                                              |                                    |
 
-### Table Format
+### Notifications-list format
 
-| Field         | Description                                                  |
-| ------------- | ------------------------------------------------------------ |
-| unread symbol | indicates unread status                                      |
-| time          | time of last read for unread; otherwise, time of last update |
-| repo          | related repository                                           |
-| type          | notification type                                            |
-| number        | associated number                                            |
-| reason        | trigger reason                                               |
-| title         | notification title                                           |
+![image](https://github.com/user-attachments/assets/f54363a3-9e19-4ab9-b755-bec448e7812a)
+
+| Column                        | Description                                                  |
+| ----------------------        | ------------------------------------------------------------ |
+| `▶` (red)                       | pointer                                                      |
+| `•` (magenta)                   | indicates unread status                                      |
+| `0h ago` / `01 Foo 00:00`         | time of last read for unread; otherwise, time of last update |
+| `foo/bar`                       | repository that generated the notification                   |
+| `Issue`/`PullRequest`/`Discussion`  | issue/PR/discussion number                                   |
+| `#0000`                         | associated number                                            |
+| `subscribed`, etc.              | trigger reason                                               |
+| `Foo the bar baz`               | issue/PR/discussion title                                    |
 
 ---
 
 ## Customizations
 
-### Fuzzy Finder (fzf)
-You can customize the `fzf` key bindings by exporting `ENVIRONMENT VARIABLES` to your `.bashrc` or
-`.zshrc`. For `AVAILABLE KEYS/ EVENTS`, refer to the `fzf` man page or visit
-[junegunn/fzf#environment-variables](https://github.com/junegunn/fzf#environment-variables) on
-GitHub.
+### fzf
 
-- **NOTE**: [How to use ALT commands in a terminal on macOS?](https://superuser.com/questions/496090/how-to-use-alt-commands-in-a-terminal-on-os-x)
+You can customize the `fzf` key bindings by exporting particular environment variables to your environment. For available keys and events, see `man fzf` or the [Environment-variables](https://github.com/junegunn/fzf#environment-variables) section of the `fzf` online docs.
+
+> [!NOTE]
+> [How to use ALT commands in a terminal on macOS?](https://superuser.com/questions/496090/how-to-use-alt-commands-in-a-terminal-on-os-x)
 
 ```sh
 # ~/.bashrc or ~/.zshrc
@@ -102,9 +105,8 @@ export FZF_DEFAULT_OPTS="
 ```
 
 #### GH_NOTIFY_FZF_OPTS
-This environment variable lets you specify additional options and key bindings to customize the
-search and display of notifications. Unlike `FZF_DEFAULT_OPTS`, `GH_NOTIFY_FZF_OPTS` specifically
-applies to the `gh notify` extension.
+
+This environment variable lets you specify additional options and key bindings to customize the search and display of notifications. Unlike `FZF_DEFAULT_OPTS`, `GH_NOTIFY_FZF_OPTS` specifically applies to the `gh notify` extension.
 
 ```sh
 # --exact: Enables exact matching instead of fuzzy matching.
@@ -117,28 +119,24 @@ GH_NOTIFY_FZF_OPTS="--exact" gh notify -an 5
 GH_NOTIFY_FZF_OPTS="--height=~100%" gh notify -an 5
 ```
 
-#### Modifying Keybindings
-You can also customize the keybindings created by this extension to avoid conflicts with
-the ones defined by `fzf`. For example, change `ctrl-p` to `ctrl-u`:
+#### Modify key bindings
+
+You can also customize the key bindings to your liking. For example, to make `ctrl-o` be the key binding for opening a browser on the notification currently pointed to, you can do this:
 
 ```sh
-GH_NOTIFY_VIEW_PATCH_KEY="ctrl-u" gh notify
+GH_NOTIFY_OPEN_BROWSER_KEY="ctrl-o" gh notify
 ```
 
-Or, switch the binding for toggling a notification and toggling the preview.
-```sh
-GH_NOTIFY_TOGGLE_KEY="tab" GH_NOTIFY_TOGGLE_PREVIEW_KEY="ctrl-y" gh notify
-```
+> [!NOTE]
+> Any key you assign a binding for must be a key listed as valid in the `fzf` man page:
+>
+> ```sh
+> man --pager='less -p "AVAILABLE KEYS"' fzf
+> ```
 
-**NOTE:** The assigned key must be a valid key listed in the `fzf` man page:
+### Specify preferred editor
 
-```sh
-man --pager='less -p "^\s+AVAILABLE_KEYS"' fzf
-```
-
-### GitHub Command Line Tool (gh)
-In the `gh` tool's config file, you can specify your preferred editor. This is particularly useful
-when you use the <kbd>ctrl</kbd><kbd>x</kbd> hotkey to comment on a notification.
+In the `gh` tool's config file, you can specify your preferred editor. This is particularly useful when you use the `ctrl-x` hotkey to comment on a notification.
 
 ```sh
 # To see more details
